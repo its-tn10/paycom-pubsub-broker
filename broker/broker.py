@@ -2,12 +2,14 @@ import asyncio
 import logging
 
 from broker.clientconnection import ClientConnection
+from broker.messages.messagehandler import MessageHandler
 
 class Broker:
 
     def __init__(self):
         self.logger = None
 
+        self.msg_handler = MessageHandler(self)
         self.server = None
 
     async def start(self, server_addr, server_port):
