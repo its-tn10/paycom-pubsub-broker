@@ -18,9 +18,15 @@ Handled JSON action messages:
 '''
 
 from broker.constants.general import PUBLISHER_TYPE, SUBSCRIBER_TYPE, USER_TYPES
-from broker.constants.errors import EMAIL_EXISTS_MSG, INVALID_USER_TYPE_MSG
+from broker.constants.errors import EMAIL_EXISTS_MSG, INVALID_USER_TYPE_MSG, USER_NOT_EXIST_MSG
 
 from broker.database.client import Client
+
+async def authenticate_user(client, client_data):
+    client.data = client_data
+    client.authenticated = True
+
+    await client.send_success_msg(0)
 
 async def create(client, user_email, user_type):
     db = client.server.database
@@ -38,11 +44,15 @@ async def create(client, user_email, user_type):
     account = await Client.create(email = user_email, publisher = is_publisher, \
                         subscriber = is_subscriber)
 
-    client.__dict__.update(**account.to_dict())
-    await client.send_success_msg(0)
+    await authenticate_user(client, account)
     
 async def connect(client, user_email):
-    client.server.logger.info('TODO: Implement connect() in authentication.py')
+    client_data = await Client.query.where(Client.email == user_email).gino.first()
+    
+    if client_data is None:
+      return await client.send_error_msg(USER_NOT_EXIST_MSG)
+    
+    await authenticate_user(client, client_data)
 
 async def disconnect(client):
     client.server.logger.info('TODO: Implement disconnect() in authentication.py')

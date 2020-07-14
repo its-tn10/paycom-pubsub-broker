@@ -15,8 +15,12 @@ class MessageHandler:
             function_name = decoded_line.pop('action').lower()
 
             for module in self.module_handlers:
+                if not self.is_authenticated(client, module.__name__):
+                    continue
+
                 module_functions = [curr_name for curr_name, func in module.__dict__.items() \
                                     if hasattr(func, '__call__')]
+                                    
                 if function_name in module_functions:
                     return await getattr(module, function_name)(client, **decoded_line)
 
@@ -29,3 +33,13 @@ class MessageHandler:
 
     async def decode_json(self, line):
         return json.loads(line)
+    
+    def is_authenticated(self, client, module_name):
+        if self.is_auth_module(module_name):
+            return True
+        
+        return client.authenticated
+    
+    def is_auth_module(self, module_name):
+        return module_name.split('.')[-1].lower() == 'authentication'
+    
