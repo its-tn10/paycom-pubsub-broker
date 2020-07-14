@@ -30,7 +30,9 @@ class Broker:
                             database_constants['DATABASE_USERNAME'], database_constants['DATABASE_PASSWORD'],
                             database_constants['DATABASE_ADDRESS'], database_constants['DATABASE_NAME']))
 
-        self.logger.info('Connected to PostgreSQL server - all operations good!')
+        self.logger.info('Connected to PostgreSQL server')
+
+        self.logger.info('All operations are running! Listening to clients...')
 
         async with self.server:
             await self.server.serve_forever()
