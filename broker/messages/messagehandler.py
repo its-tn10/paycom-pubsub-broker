@@ -18,11 +18,12 @@ class MessageHandler:
                 if not self.is_authenticated(client, module.__name__):
                     continue
                 
-                if not self.is_publisher(client, module.__name__):
-                    continue
-                
-                if not self.is_subscriber(client, module.__name__):
-                    continue
+                if client.authenticated:
+                    if not self.is_publisher(client, module.__name__):
+                        continue
+                    
+                    if not self.is_subscriber(client, module.__name__):
+                        continue
 
                 module_functions = [curr_name for curr_name, func in module.__dict__.items() \
                                     if hasattr(func, '__call__')]
@@ -50,13 +51,13 @@ class MessageHandler:
         if self.is_pub_module(module_name):
             return client.data.publisher
         
-        return False
+        return True
 
     def is_subscriber(self, client, module_name):
         if self.is_sub_module(module_name):
             return client.data.subscriber
         
-        return False
+        return True
     
     def is_auth_module(self, module_name):
         return module_name.split('.')[-1].lower() == 'authentication'
