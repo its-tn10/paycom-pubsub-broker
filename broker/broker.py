@@ -11,6 +11,7 @@ class Broker:
     def __init__(self):
         self.logger = None
 
+        self.clients = []
         self.database = db
         self.topics = {}
 
@@ -59,5 +60,6 @@ class Broker:
 
     async def new_client_connection(self, reader, writer):
         new_client = Client(self, reader, writer)
-
+        self.clients.append(new_client)
+        
         await new_client.keep_connection_alive()

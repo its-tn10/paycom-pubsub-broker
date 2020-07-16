@@ -50,5 +50,7 @@ class ClientConnection:
         await self.handle_client_disconnection()
     
     async def handle_client_disconnection(self):
+        self.server.clients.remove(self)
+
         self.server.logger.info('Client disconnection')
     
