@@ -6,6 +6,11 @@ class Topic(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String, nullable=False, unique=True)
 
+    def __init__(self, *args, **kwargs):
+        self.messages = []
+
+        super().__init__(*args, **kwargs)
+
 class Message(db.Model):
     __tablename__ = 'messages'
 

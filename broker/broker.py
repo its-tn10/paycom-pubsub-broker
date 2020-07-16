@@ -3,6 +3,7 @@ import logging
 
 from broker.client import Client
 from broker.database import db
+from broker.database.publishing import Topic, Message
 from broker.messages.messagehandler import MessageHandler
 
 class Broker:
@@ -11,6 +12,7 @@ class Broker:
         self.logger = None
 
         self.database = db
+        self.topics = {}
 
         self.msg_handler = MessageHandler(self)
         self.server = None
@@ -32,11 +34,29 @@ class Broker:
 
         self.logger.info('Connected to PostgreSQL server')
 
+        await self.load_data()
+
         self.logger.info('All operations are running! Listening to clients...')
 
         async with self.server:
             await self.server.serve_forever()
     
+    async def load_data(self):
+        await self.load_topics()
+        await self.load_messages()
+
+        self.logger.info(f'Pre-loaded {len(self.topics)} topics their respective messages')
+
+    async def load_topics(self):   
+        async with self.database.transaction():
+            async for topic in Topic.query.order_by(Topic.id).gino.iterate():
+                self.topics[topic.id] = topic
+    
+    async def load_messages(self):
+        async with self.database.transaction():
+            async for msg in Message.query.order_by(Message.id).gino.iterate():
+                self.topics[msg.topic_id].messages.append(msg)
+
     async def new_client_connection(self, reader, writer):
         new_client = Client(self, reader, writer)
 
