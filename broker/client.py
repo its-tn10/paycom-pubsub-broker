@@ -7,3 +7,5 @@ class Client(ClientConnection):
     
         self.authenticated = False
         self.data = None
+
+        self.subscriptions = []

@@ -37,6 +37,9 @@ class ClientConnection:
     async def send_success_msg(self, success_msg):
         await self.send_json(action='success', message=success_msg)
     
+    async def send_broadcast_msg(self, msg):
+        await self.send_json(action='broadcast', message=msg)
+
     async def send_json(self, **kwargs):
         if not self.writer.is_closing():
             line = await self.server.msg_handler.encode_json(**kwargs)

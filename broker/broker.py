@@ -3,7 +3,7 @@ import logging
 
 from broker.client import Client
 from broker.database import db
-from broker.database.publishing import Topic, Message
+from broker.database.publishing import Topic, Message, ReadMessage
 from broker.messages.messagehandler import MessageHandler
 
 class Broker:
@@ -42,11 +42,17 @@ class Broker:
         async with self.server:
             await self.server.serve_forever()
     
+    async def broadcast_msg(self, msg):
+        for client in self.clients:
+            if client.data.subscriber and msg.topic_id in client.subscriptions:
+                await ReadMessage.create(client_id = client.data.id, message_id = msg.id)
+                await client.send_broadcast_msg(msg.message)
+                
     async def load_data(self):
         await self.load_topics()
         await self.load_messages()
 
-        self.logger.info(f'Pre-loaded {len(self.topics)} topics their respective messages')
+        self.logger.info(f'Pre-loaded {len(self.topics)} topics and their respective messages')
 
     async def load_topics(self):   
         async with self.database.transaction():
@@ -61,5 +67,5 @@ class Broker:
     async def new_client_connection(self, reader, writer):
         new_client = Client(self, reader, writer)
         self.clients.append(new_client)
-        
+
         await new_client.keep_connection_alive()
