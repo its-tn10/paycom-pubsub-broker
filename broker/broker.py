@@ -44,9 +44,12 @@ class Broker:
     
     async def broadcast_msg(self, msg):
         for client in self.clients:
-            if client.data.subscriber and msg.topic_id in client.subscriptions:
-                await ReadMessage.create(client_id = client.data.id, message_id = msg.id)
-                await client.send_broadcast_msg(msg.message)
+            if client.authenticated and client.data.subscriber: 
+                has_subscribed = any([sub.id == msg.topic_id for sub in client.subscriptions])
+                
+                if has_subscribed:
+                    await ReadMessage.create(client_id = client.data.id, message_id = msg.id)
+                    await client.send_broadcast_msg(msg.message)
                 
     async def load_data(self):
         await self.load_topics()

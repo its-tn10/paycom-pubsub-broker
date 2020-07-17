@@ -34,4 +34,4 @@ class Client(ClientConnection):
 
                 if not read_message:
                     await ReadMessage.create(client_id = self.data.id, message_id = message.id)
-                    await self.send_json(action = 'unread', topic = topic.name, message = message.message)    
+                    await self.send_json(action = 'unread', message = message.message)    
