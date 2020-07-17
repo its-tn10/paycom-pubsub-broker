@@ -13,8 +13,6 @@ Handled JSON action messages:
 * connect(user_email): Allows the client to login to a created
   user account. Will be identified as a pub or a sub later on.
 
-* disconnect(): Allows the client to disconnect from the broker server.
-
 '''
 
 from broker.constants.general import PUBLISHER_TYPE, SUBSCRIBER_TYPE, USER_TYPES
@@ -56,6 +54,3 @@ async def connect(client, user_email):
       return await client.send_error_msg(USER_NOT_EXIST_MSG)
     
     await authenticate_user(client, client_data)
-
-async def disconnect(client):
-    client.server.logger.info('TODO: Implement disconnect() in authentication.py')
