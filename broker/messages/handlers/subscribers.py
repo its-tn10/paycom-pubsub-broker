@@ -19,6 +19,8 @@ Handled JSON action messages:
 from broker.constants.errors import ALREADY_SUBSCRIBED_MSG, CANT_SUBSCRIBE_MSG, \
                                     NOT_SUBSCRIBED_MSG
 
+from broker.constants.general import LIST_TOPICS_ACTION
+
 from broker.database.publishing import Topic, ReadMessage
 from broker.database.subscribing import Subscription
 
@@ -30,7 +32,7 @@ async def read_all_topic_msgs(client, topic_id):
 
 async def list_topics(client):
     topic_names = [topic.name for topic in client.server.topics.values()]
-    await client.send_json(action = 'list_topics', topics = topic_names)
+    await client.send_json(action = LIST_TOPICS_ACTION, topics = topic_names)
 
 async def subscribe(client, topic_name):
     topic_data = await Topic.query.where(Topic.name == topic_name).gino.first()

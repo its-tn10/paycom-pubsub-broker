@@ -2,6 +2,8 @@ from broker.clientconnection import ClientConnection
 from broker.database.publishing import Message, ReadMessage
 from broker.database.subscribing import Subscription
 
+from broker.constants.general import UNREAD_MSG_ACTION
+
 class Client(ClientConnection):
 
     def __init__(self, *args):
@@ -34,4 +36,4 @@ class Client(ClientConnection):
 
                 if not read_message:
                     await ReadMessage.create(client_id = self.data.id, message_id = message.id)
-                    await self.send_json(action = 'unread', message = message.message)    
+                    await self.send_json(action = UNREAD_MSG_ACTION, message = message.message)    
