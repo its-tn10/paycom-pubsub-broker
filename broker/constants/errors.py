@@ -14,3 +14,11 @@ TOPIC_EXISTS_MSG = 'The topic name you have tried to create already exists. Try 
                     'to publish a message.'
 
 TOPIC_NOT_EXISTS_MSG = 'The topic name you have tried to publish to does not exist. Try a different topic name or create it.'
+
+
+
+
+ALREADY_SUBSCRIBED_MSG = 'You have already subscribed to the topic name you have requested to subscribe to. Subscribe to ' \
+                    'a different topic or unsubscribe.'
+CANT_SUBSCRIBE_MSG = 'The topic name you have tried to (un)subscribe does not exist. Try a different topic name.'
+NOT_SUBSCRIBED_MSG = 'You have not yet subscribed to the topic name you have tried to unsubscribe to. Try a different topic name.'

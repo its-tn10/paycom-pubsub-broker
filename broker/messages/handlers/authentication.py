@@ -28,6 +28,9 @@ async def authenticate_user(client, client_data):
 
     await client.send_success_msg(0)
 
+    if client.data.subscriber:
+      return await client.subscriber_init()
+
 async def create(client, user_email, user_type):
     db = client.server.database
     email_exists = await db.scalar(db.exists().where(Client.email == user_email).select())
