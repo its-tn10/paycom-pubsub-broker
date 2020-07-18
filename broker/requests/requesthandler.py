@@ -1,8 +1,8 @@
-from broker.messages.handlers import authentication, publishers, subscribers
+from broker.requests.handlers import authentication, publishers, subscribers
 
 import json
 
-class MessageHandler:
+class RequestHandler:
     
     def __init__(self, server):
         self.server = server

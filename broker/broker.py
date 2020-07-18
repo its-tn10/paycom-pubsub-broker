@@ -4,7 +4,7 @@ import logging
 from broker.client import Client
 from broker.database import db
 from broker.database.publishing import Topic, Message, ReadMessage
-from broker.messages.messagehandler import MessageHandler
+from broker.requests.requesthandler import RequestHandler
 
 class Broker:
 
@@ -15,7 +15,7 @@ class Broker:
         self.database = db
         self.topics = {}
 
-        self.msg_handler = MessageHandler(self)
+        self.request_handler = RequestHandler(self)
         self.server = None
 
     async def start(self, server_constants, database_constants):

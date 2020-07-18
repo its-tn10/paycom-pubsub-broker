@@ -29,7 +29,7 @@ class ClientConnection:
     async def handle_received_data(self, line):
         line = line.decode().strip()
 
-        await self.server.msg_handler.handle_msg(self, line)
+        await self.server.request_handler.handle_msg(self, line)
     
     async def send_error_msg(self, error):
         await self.send_json(action='error', message=error)
@@ -42,7 +42,7 @@ class ClientConnection:
 
     async def send_json(self, **kwargs):
         if not self.writer.is_closing():
-            line = await self.server.msg_handler.encode_json(**kwargs)
+            line = await self.server.request_handler.encode_json(**kwargs)
             line += '\n'
 
             self.writer.write(line.encode('utf-8'))
