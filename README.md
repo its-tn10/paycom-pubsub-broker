@@ -1,6 +1,8 @@
 # paycom-pubsub-broker
 This repository is my implementation of an assigned project from Paycom's Virtual Summer Engagement Program during Summer 2020 in creating a program to replicate pub-sub messaging between various clients. It is based on Python 3.8, with notable libraries containing **asyncio** to build an asynchronous, concurrent broker server, along with the **asyncpg**, **gino**, and **SQLAlchemy** libraries to connect to a PostgreSQL-based database storing client information, messages, topics, and more. 
 
+Want to test the capabilities of this broker server? Feel free to utilize a pre-built client based off of Python 3.8+ and asyncio [here](https://github.com/its-tn10/paycom-pubsub-client)!
+
 ## Installation
 With the assumption of having Python 3.8+ installed, use the package manager **pip** to install the required libraries as mentioned above, which are listed in the **requirements.txt** file in this repository. 
 
